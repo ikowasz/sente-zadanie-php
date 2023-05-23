@@ -18,16 +18,16 @@ class OrdersController extends AbstractController
     #[Route('/orders', name: 'orders_index')]
     public function index(OrderRepository $repo, Request $request): Response
     {
-        $sort = $request->query->get('sort', self::$defaultSortBy);
+        $sortBy = $request->query->get('sort_by', self::$defaultSortBy);
 
-        $this->validateSortParam($sort);
+        $this->validateSortParam($sortBy);
 
         $orders = $repo->findAll()
-            ->sortBy($sort);
+            ->sortBy($sortBy);
 
         return $this->render('orders/base.html.twig', [
             'rows' => self::$tableRows,
-            'sort' => $sort,
+            'sortBy' => $sortBy,
             'orders' => $orders,
         ]);
     }
