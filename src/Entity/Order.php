@@ -9,49 +9,52 @@ class Order
      *
      * @var integer
      */
-    private int $ref;
+    public readonly int $ref;
 
     /**
      * Client name
      *
      * @var string
      */
-    private string $client_name;
+    public readonly string $client_name;
 
     /**
      * Order registration date
      *
      * @var \DateTimeInterface
      */
-    private \DateTimeInterface $regdate;
+    public readonly \DateTimeInterface $regdate;
 
     /**
      * Order symbol
      *
      * @var string
      */
-    private string $symbol;
+    public readonly string $symbol;
 
     /**
      * Order send date
      *
      * @var \DateTimeInterface
      */
-    private \DateTimeInterface $send_date;
+    public readonly \DateTimeInterface $send_date;
 
     /**
      * Is order invoiced
      *
      * @var boolean
      */
-    private bool $invoiced;
+    public readonly bool $invoiced;
 
     public function __construct($data)
     {
         $this->set($data);
     }
 
-    public function set($data)
+    /**
+     * Setinitial order data
+     */
+    private function set(array $data): void
     {
         $this->ref = intval($data['ref']);
         $this->client_name = $data['client_name'];
@@ -59,53 +62,5 @@ class Order
         $this->symbol = $data['symbol'];
         $this->send_date = new \DateTime($data['send_date']);
         $this->invoiced = !!$data['invoiced'];
-    }
-
-    /**
-     * Get the value of ref
-     */
-    public function getRef(): int
-    {
-        return $this->ref;
-    }
-
-    /**
-     * Get the value of client_name
-     */
-    public function getClientName(): string
-    {
-        return $this->client_name;
-    }
-
-    /**
-     * Get the value of regdate
-     */
-    public function getRegdate(): \DateTimeInterface
-    {
-        return $this->regdate;
-    }
-
-    /**
-     * Get the value of symbol
-     */
-    public function getSymbol(): string
-    {
-        return $this->symbol;
-    }
-
-    /**
-     * Get the value of send_date
-     */
-    public function getSendDate(): \DateTimeInterface
-    {
-        return $this->send_date;
-    }
-
-    /**
-     * Get the value of invoiced
-     */
-    public function isInvoiced(): bool
-    {
-        return $this->invoiced;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Collection\OrdersCollection;
 use App\Loader\OrdersLoader;
 use App\Entity\Order;
 
@@ -14,9 +15,9 @@ class OrderRepository
     /**
      * Get all orders
      *
-     * @return array
+     * @return OrdersCollection Collection with all orders
      */
-    public function findAll(): array
+    public function findAll(): OrdersCollection
     {
         return $this->getOrders();
     }
@@ -29,25 +30,22 @@ class OrderRepository
      */
     public function findBySymbolOrRef(string $needle): ?Order
     {
-        foreach ($this->getOrders() as $order) {
-            if (
-                (string)$order->getRef() === $needle
-                || $order->getSymbol() === $needle 
-            ) {
-                return $order;
-            }
-        }
+        $orders = $this->getOrders();
+        $order = $orders->findBy('symbol', $needle);
+        $order = (!is_null($order)) ? $order : $orders->findBy('ref', $needle);
 
-        return null;
+        return $order;
     }
 
     /**
      * Retrieve orders from loader
      *
-     * @return array
+     * @return OrdersCollection
      */
-    private function getOrders(): array
+    private function getOrders(): OrdersCollection
     {
-        return $this->loader->getOrders();
+        $orders = $this->loader->getOrders();
+
+        return new OrdersCollection($orders);
     }
 }
