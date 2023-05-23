@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Collection;
-use App\Entity\Order;
+use App\Enum\SortDirection;
 
 class OrdersCollection extends \ArrayObject
 {
@@ -36,12 +36,16 @@ class OrdersCollection extends \ArrayObject
      * @param string $property Name of property to sort by
      * @return OrdersCollection Sorted collection copy
      */
-    public function sortBy(string $property): OrdersCollection
+    public function sortBy(string $property, SortDirection $direction = SortDirection::ASC): OrdersCollection
     {
         $orders = $this->getArrayCopy();
 
-        usort($orders, fn($a, $b): int => $a->$property <=> $b->$property);
+        usort($orders, fn($a, $b): int =>
+            ($direction === SortDirection::ASC)
+                ? $a->$property <=> $b->$property
+                : $b->$property <=> $a->$property
+        );
 
-        return new OrdersCollection($orders);
+        return new self($orders);
     }
 }

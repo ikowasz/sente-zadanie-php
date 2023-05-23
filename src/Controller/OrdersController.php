@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Enum\SortDirection;
 use App\Repository\OrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,18 +19,21 @@ class OrdersController extends AbstractController
     #[Route('/orders', name: 'orders_index')]
     public function index(OrderRepository $repo, Request $request): Response
     {
-        $sortBy = $request->query->get('sort_by', self::$defaultSortBy);
         $queryText = $request->query->get('q');
+        $sortBy = $request->query->get('sort_by', self::$defaultSortBy);
+        $sortOrder = $request->query->get('sort_order', SortDirection::ASC->value);
 
         $this->validateSortParam($sortBy);
 
+        $sortDirection = SortDirection::tryFrom($sortOrder) ?? SortDirection::ASC;
         $orders = empty($queryText) ? $repo->findAll() : $repo->findBySymbolOrRef($queryText);
-        $orders = $orders->sortBy($sortBy);
+        $orders = $orders->sortBy($sortBy, $sortDirection);
 
         return $this->render('orders/index.html.twig', [
             'availableSort' => self::$allowSortBy,
             'rows' => self::$tableRows,
             'sortBy' => $sortBy,
+            'sortOrder' => $sortDirection->value,
             'orders' => $orders,
             'query' => $queryText,
         ]);

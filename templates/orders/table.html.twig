@@ -5,12 +5,19 @@
 				<th scope="col">
 					{% if row in availableSort %}
 						{% if sortBy == row %}
-							<small>&#9660;</small>
+							{% if sortOrder == constant('App\\Enum\\SortDirection::ASC').value %}
+								<small>&#9652;</small>
+							{% else %}
+								<small>&#9662;</small>
+							{% endif %}
 						{% endif %}
 
 						<a href={{ path('orders_index', {
+							'q': query,
 							'sort_by': row,
-							'q': query
+							'sort_order': (sortBy == row and sortOrder != constant('App\\Enum\\SortDirection::DESC').value)
+								? constant('App\\Enum\\SortDirection::DESC').value
+								: constant('App\\Enum\\SortDirection::ASC').value
 						}) }}>
 
 							{{ row|humanize }}
