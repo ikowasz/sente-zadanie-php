@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Client's orders table{% endblock %}
+
 {% block body %}
 <div class="container">
 
@@ -7,24 +9,39 @@
     <thead>
       <tr>
         {% for row in rows %}
-          <th scope="col">{{ row }}</th>
+          <th scope="col">
+            {% if row in availableSort %}
+              {% if sortBy == row %}
+                <small>&#9660;</small>
+              {% endif %}
+
+              <a href="?sort_by={{ row }}">
+
+                {{ row }}
+              </a>
+            {% else %}
+              {{ row }}
+            {% endif %}
+          </th>
         {% endfor %}
       </tr>
     </thead>
 
     <tbody>
       {% for order in orders %}
-      <tr>
-        {% for row in rows %}
-          <td>
-            {% if attribute(order, row).timestamp is defined %}
-              {{ attribute(order, row)|date('Y-m-d H:i') }}
-            {% else %}
-              {{ attribute(order, row) }}
-            {% endif %}
-          </td>
-        {% endfor %}
-      </tr>
+        <tr>
+          {% for row in rows %}
+            <td>
+              {% if attribute(order, row).timestamp is defined %}
+                {{ attribute(order, row)|date('Y-m-d H:i') }}
+              {% elseif row == 'invoiced' %}
+                {{ order.invoiced ? 'Yes' : 'No' }}
+              {% else %}
+                {{ attribute(order, row) }}
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
       {% endfor %}
     </tbody>
   </table>

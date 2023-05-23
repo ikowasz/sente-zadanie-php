@@ -26,6 +26,7 @@ class OrdersController extends AbstractController
             ->sortBy($sortBy);
 
         return $this->render('orders/base.html.twig', [
+            'availableSort' => self::$allowSortBy,
             'rows' => self::$tableRows,
             'sortBy' => $sortBy,
             'orders' => $orders,
