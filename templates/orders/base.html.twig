@@ -17,10 +17,10 @@
 
               <a href="?sort_by={{ row }}">
 
-                {{ row }}
+                {{ row|humanize }}
               </a>
             {% else %}
-              {{ row }}
+              {{ row|humanize }}
             {% endif %}
           </th>
         {% endfor %}
