@@ -1,5 +1,40 @@
-{% extends 'orders/base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block contents %}
-    {{ include('orders/table.html.twig') }}
+{% block title %}
+    {% if orders|length == 0 %}
+        Client's orders not found
+    {% elseif query is empty %}
+        Client's orders
+    {% else %}
+        Client's orders search results: {{ query|escape }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <nav class="navbar bg-body-tertiary">
+        <div class="container">
+            <a class="navbar-brand" href="/orders">Client's orders</a>
+
+            <form class="d-flex" role="search" action="/orders" method="get">
+                <input type="hidden" name="sort_by" value="{{ sortBy }}"/>
+                <input class="form-control me-2" type="search" placeholder="Ref or symbol" aria-label="Ref or symbol" name="q" value="{{ query|escape }}">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+
+        </div>
+    </nav>
+
+	<div class="container">
+        {% if orders|length > 0 %}
+            {% include 'orders/table.html.twig' %}
+        {% else %}
+            <div class="row text-center mt-5">
+                {% if query is empty %}
+                    Orders not found
+                {% else %}
+                    <h3>"{{ query|escape }}" not found</h3>
+                {% endif %}
+            </div>
+        {% endif %}
+	</div>
 {% endblock %}

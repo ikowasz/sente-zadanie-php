@@ -26,17 +26,14 @@ class OrdersController extends AbstractController
         $orders = empty($queryText) ? $repo->findAll() : $repo->findBySymbolOrRef($queryText);
         $orders = $orders->sortBy($sortBy);
 
-        if (count($orders) > 0) {
-            return $this->render('orders/index.html.twig', [
-                'availableSort' => self::$allowSortBy,
-                'rows' => self::$tableRows,
-                'sortBy' => $sortBy,
-                'orders' => $orders,
-                'query' => $queryText,
-            ]);
-        }
+        return $this->render('orders/index.html.twig', [
+            'availableSort' => self::$allowSortBy,
+            'rows' => self::$tableRows,
+            'sortBy' => $sortBy,
+            'orders' => $orders,
+            'query' => $queryText,
+        ]);
 
-        return $this->render('orders/not_found.html.twig', ['query' => $queryText]);
     }
 
     /**
@@ -52,5 +49,4 @@ class OrdersController extends AbstractController
             throw new HttpException(400, "Sort parameter not allowed: $param");
         }
     }
-
 }

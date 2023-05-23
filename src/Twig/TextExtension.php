@@ -27,5 +27,4 @@ class TextExtension extends AbstractExtension
 
         return $out;
     }
-
 }
