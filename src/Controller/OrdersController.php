@@ -12,7 +12,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrdersController extends AbstractController
 {
     public static $defaultSortBy = 'ref';
-    public static $allowSortBy = ['ref', 'symbol', 'regdate', 'send_date'];
+    public static $allowSortBy = ['ref', 'symbol', 'regdate', 'sendDate'];
+    public static $tableRows = ['ref', 'clientName', 'regdate', 'symbol', 'sendDate', 'invoiced'];
 
     #[Route('/orders', name: 'orders_index')]
     public function index(OrderRepository $repo, Request $request): Response
@@ -24,8 +25,10 @@ class OrdersController extends AbstractController
         $orders = $repo->findAll()
             ->sortBy($sort);
 
-        return $this->render('orders/index.html.twig', [
-            'orders' => $orders
+        return $this->render('orders/base.html.twig', [
+            'rows' => self::$tableRows,
+            'sort' => $sort,
+            'orders' => $orders,
         ]);
     }
 
