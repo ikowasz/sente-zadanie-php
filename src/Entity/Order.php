@@ -16,7 +16,7 @@ class Order
      *
      * @var string
      */
-    public readonly string $client_name;
+    public readonly string $clientName;
 
     /**
      * Order registration date
@@ -37,7 +37,7 @@ class Order
      *
      * @var \DateTimeInterface
      */
-    public readonly \DateTimeInterface $send_date;
+    public readonly \DateTimeInterface $sendDate;
 
     /**
      * Is order invoiced
@@ -57,10 +57,10 @@ class Order
     private function set(array $data): void
     {
         $this->ref = intval($data['ref']);
-        $this->client_name = $data['client_name'];
+        $this->clientName = $data['client_name'];
         $this->regdate = new \DateTime($data['regdate']);
         $this->symbol = $data['symbol'];
-        $this->send_date = new \DateTime($data['send_date']);
+        $this->sendDate = new \DateTime($data['send_date']);
         $this->invoiced = !!$data['invoiced'];
     }
 }
