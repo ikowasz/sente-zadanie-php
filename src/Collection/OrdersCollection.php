@@ -6,21 +6,28 @@ use App\Entity\Order;
 class OrdersCollection extends \ArrayObject
 {
     /**
-     * Find order using property name and it's value
-     * 
-     * @param string $property Name of property to compare
-     * @param mixed $value Value to search for
-     * @return Order|null Found order or null if nothing found
+     * Find orders using multiple properties, looking for part of a string
+     *
+     * @param array $search Map to search, with property as key and value to search
+     * @return OrdersCollection Copy of filtered collection
      */
-    public function findBy(string $property, $value): ?Order
+    public function findContainingAnyOf(array $search): OrdersCollection
     {
+        $found = [];
+
         foreach ($this as $order) {
-            if ($order->$property == $value) {
-                return $order;
+            foreach ($search as $property => $valuePar) {
+                $searchValue = strtolower($valuePar);
+                $propertyValue = strtolower((string)$order->$property);
+
+                if (str_contains($propertyValue, $searchValue)) {
+                    $found[] = $order;
+                    break;
+                }
             }
         }
 
-        return null;
+        return new OrdersCollection($found);
     }
 
     /**

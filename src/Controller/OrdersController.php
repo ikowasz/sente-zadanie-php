@@ -19,32 +19,19 @@ class OrdersController extends AbstractController
     public function index(OrderRepository $repo, Request $request): Response
     {
         $sortBy = $request->query->get('sort_by', self::$defaultSortBy);
+        $queryText = $request->query->get('q');
 
         $this->validateSortParam($sortBy);
 
-        $orders = $repo->findAll()->sortBy($sortBy);
+        $orders = empty($queryText) ? $repo->findAll() : $repo->findBySymbolOrRef($queryText);
+        $orders = $orders->sortBy($sortBy);
 
-        return $this->render('orders/index.html.twig', [
-            'availableSort' => self::$allowSortBy,
-            'rows' => self::$tableRows,
-            'sortBy' => $sortBy,
-            'orders' => $orders,
-            'query' => '',
-        ]);
-    }
-
-    #[Route('/orders/search', name: 'orders_search')]
-    public function search(OrderRepository $repo, Request $request): Response
-    {
-        $queryText = $request->query->get('q');
-        $order = $repo->findBySymbolOrRef($queryText);
-
-        if (!is_null($order)) {
+        if (count($orders) > 0) {
             return $this->render('orders/index.html.twig', [
-                'availableSort' => [],
+                'availableSort' => self::$allowSortBy,
                 'rows' => self::$tableRows,
-                'sortBy' => '',
-                'orders' => [$order],
+                'sortBy' => $sortBy,
+                'orders' => $orders,
                 'query' => $queryText,
             ]);
         }

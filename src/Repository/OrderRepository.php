@@ -28,13 +28,12 @@ class OrderRepository
      * @param string $needle String to search for
      * @return Order|null Found order or null if nothing found
      */
-    public function findBySymbolOrRef(string $needle): ?Order
+    public function findBySymbolOrRef(string $needle): OrdersCollection
     {
-        $orders = $this->getOrders();
-        $order = $orders->findBy('symbol', $needle);
-        $order = (!is_null($order)) ? $order : $orders->findBy('ref', $needle);
-
-        return $order;
+        return $this->getOrders()->findContainingAnyOf([
+            'symbol' => $needle,
+            'ref' => $needle,
+        ]);
     }
 
     /**
