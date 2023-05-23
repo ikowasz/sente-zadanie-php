@@ -5,21 +5,14 @@
 				<th scope="col">
 					{% if row in availableSort %}
 						{% if sortBy == row %}
-							{% if sortOrder == constant('App\\Enum\\SortDirection::ASC').value %}
-								<small>&#9652;</small>
-							{% else %}
-								<small>&#9662;</small>
-							{% endif %}
+							<small>{{ sortOrderIcon(sortOrder)|raw }}</small>
 						{% endif %}
 
 						<a href={{ path('orders_index', {
 							'q': query,
 							'sort_by': row,
-							'sort_order': (sortBy == row and sortOrder != constant('App\\Enum\\SortDirection::DESC').value)
-								? constant('App\\Enum\\SortDirection::DESC').value
-								: constant('App\\Enum\\SortDirection::ASC').value
+							'sort_order': sortBy == row ? toggleSortOrder(sortOrder) : defaultOrder
 						}) }}>
-
 							{{ row|humanize }}
 						</a>
 					{% else %}
@@ -36,7 +29,7 @@
 				{% for row in rows %}
 					<td>
 						{% if attribute(order, row).timestamp is defined %}
-							{{ attribute(order, row)|date('Y-m-d H:i') }}
+							{{ attribute(order, row)|date }}
 						{% elseif row == 'invoiced' %}
 							{{ order.invoiced ? 'Yes' : 'No' }}
 						{% else %}

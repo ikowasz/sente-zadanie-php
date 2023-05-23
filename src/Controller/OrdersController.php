@@ -21,23 +21,23 @@ class OrdersController extends AbstractController
     {
         $queryText = $request->query->get('q');
         $sortBy = $request->query->get('sort_by', self::$defaultSortBy);
-        $sortOrder = $request->query->get('sort_order', SortDirection::ASC->value);
+        $sortOrder = $request->query->get('sort_order');
+        $sortDirection = SortDirection::fromString($sortOrder);
 
         $this->validateSortParam($sortBy);
 
-        $sortDirection = SortDirection::tryFrom($sortOrder) ?? SortDirection::ASC;
         $orders = empty($queryText) ? $repo->findAll() : $repo->findBySymbolOrRef($queryText);
         $orders = $orders->sortBy($sortBy, $sortDirection);
 
         return $this->render('orders/index.html.twig', [
             'availableSort' => self::$allowSortBy,
+            'defaultOrder' => SortDirection::DEFAULT->value,
             'rows' => self::$tableRows,
             'sortBy' => $sortBy,
             'sortOrder' => $sortDirection->value,
             'orders' => $orders,
             'query' => $queryText,
         ]);
-
     }
 
     /**
