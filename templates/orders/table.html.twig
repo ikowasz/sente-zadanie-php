@@ -8,7 +8,10 @@
 							<small>&#9660;</small>
 						{% endif %}
 
-						<a href="?sort_by={{ row }}">
+						<a href={{ path('orders_index', {
+							'sort_by': row,
+							'q': query
+						}) }}>
 
 							{{ row|humanize }}
 						</a>

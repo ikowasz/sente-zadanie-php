@@ -15,7 +15,7 @@
         <div class="container">
             <a class="navbar-brand" href="/orders">Client's orders</a>
 
-            <form class="d-flex" role="search" action="/orders" method="get">
+            <form class="d-flex" role="search" action={{ path('orders_index') }} method="get">
                 <input type="hidden" name="sort_by" value="{{ sortBy }}"/>
                 <input class="form-control me-2" type="search" placeholder="Ref or symbol" aria-label="Ref or symbol" name="q" value="{{ query|escape }}">
                 <button class="btn btn-outline-success" type="submit">Search</button>
