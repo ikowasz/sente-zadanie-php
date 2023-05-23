@@ -1,50 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Client's orders table{% endblock %}
+{% block title %}Client's orders{% endblock %}
 
 {% block body %}
-<div class="container">
+    <nav class="navbar bg-body-tertiary">
+        <div class="container">
+            <a class="navbar-brand" href="/orders">Client's orders</a>
 
-  <table class="table table-striped text-center">
-    <thead>
-      <tr>
-        {% for row in rows %}
-          <th scope="col">
-            {% if row in availableSort %}
-              {% if sortBy == row %}
-                <small>&#9660;</small>
-              {% endif %}
+            <form class="d-flex" role="search" action="/orders/search" method="get">
+                <input class="form-control me-2" type="search" placeholder="Ref or symbol" aria-label="Ref or symbol" name="q" value="{{ query }}">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
 
-              <a href="?sort_by={{ row }}">
+        </div>
+    </nav>
 
-                {{ row|humanize }}
-              </a>
-            {% else %}
-              {{ row|humanize }}
-            {% endif %}
-          </th>
-        {% endfor %}
-      </tr>
-    </thead>
-
-    <tbody>
-      {% for order in orders %}
-        <tr>
-          {% for row in rows %}
-            <td>
-              {% if attribute(order, row).timestamp is defined %}
-                {{ attribute(order, row)|date('Y-m-d H:i') }}
-              {% elseif row == 'invoiced' %}
-                {{ order.invoiced ? 'Yes' : 'No' }}
-              {% else %}
-                {{ attribute(order, row) }}
-              {% endif %}
-            </td>
-          {% endfor %}
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-</div>
+	<div class="container">
+        {% block contents %}{% endblock %}
+	</div>
 {% endblock %}

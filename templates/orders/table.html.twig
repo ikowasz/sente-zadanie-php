@@ -1,0 +1,40 @@
+<table class="table table-striped text-center">
+	<thead>
+		<tr>
+			{% for row in rows %}
+				<th scope="col">
+					{% if row in availableSort %}
+						{% if sortBy == row %}
+							<small>&#9660;</small>
+						{% endif %}
+
+						<a href="?sort_by={{ row }}">
+
+							{{ row|humanize }}
+						</a>
+					{% else %}
+						{{ row|humanize }}
+					{% endif %}
+				</th>
+			{% endfor %}
+		</tr>
+	</thead>
+
+	<tbody>
+		{% for order in orders %}
+			<tr>
+				{% for row in rows %}
+					<td>
+						{% if attribute(order, row).timestamp is defined %}
+							{{ attribute(order, row)|date('Y-m-d H:i') }}
+						{% elseif row == 'invoiced' %}
+							{{ order.invoiced ? 'Yes' : 'No' }}
+						{% else %}
+							{{ attribute(order, row) }}
+						{% endif %}
+					</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
