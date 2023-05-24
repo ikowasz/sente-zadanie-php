@@ -1,0 +1,14 @@
+ref: ref zamówienia
+clientName: nazwa klienta
+regdate: data zarejestrowania zamówienia
+symbol: symbol zamówienia
+sendDate: data wysłania zamówienia
+invoiced: czy zafakturowane
+ref or symbol: ref albo symbol zamówienia
+search: szukaj
+client's orders: zamówienia klienta
+client's orders not found: nie znaleziono zamówień klienta
+search results: wyniki wyszukiwania
+query not found: 'nie znaleziono "query"'
+yes: tak
+no: nie

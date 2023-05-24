@@ -1,6 +1,6 @@
 <form class="d-flex" role="search" action={{ path('orders_index') }} method="get">
-    <input class="form-control me-2" type="search" placeholder="Ref or symbol" name="q" value="{{ query }}">
-    <button class="btn btn-outline-success" type="submit">Search</button>
+    <input class="form-control me-2" type="search" placeholder='{{ "ref or symbol"|trans }}' name="q" value="{{ query }}">
+    <button class="btn btn-outline-success" type="submit">{{ 'search'|trans }}</button>
 
     <input type="hidden" name="sort_by" value="{{ sortBy }}"/>
     <input type="hidden" name="sort_order" value="{{ sortOrder }}"/>

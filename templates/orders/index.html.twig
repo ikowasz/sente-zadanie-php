@@ -2,18 +2,18 @@
 
 {% block title %}
     {% if orders|length == 0 %}
-        Client's orders not found
+        {{ "client's orders not found"|trans }}
     {% elseif query is empty %}
-        Client's orders
+        {{ "client's orders"|trans }}
     {% else %}
-        Client's orders search results: {{ query }}
+        {{ "search results"|trans }}: {{ query }}
     {% endif %}
 {% endblock %}
 
 {% block body %}
     <nav class="navbar bg-body-tertiary">
         <div class="container">
-            <a class="navbar-brand" href="/orders">Client's orders</a>
+            <a class="navbar-brand" href="/orders">{{ "client's orders"|trans }}</a>
 
             {% include 'orders/search_form.html.twig' %}
         </div>
@@ -26,9 +26,9 @@
             {% else %}
                 <h3>
                     {% if query is empty %}
-                        Orders not found
+                        {{ "client's orders not found"|trans }}
                     {% else %}
-                        "{{ query }}" not found
+                        {{ "query not found"|trans({query} )}}
                     {% endif %}
                 </h3>
             {% endif %}

@@ -9,10 +9,10 @@
 						{% endif %}
 
 						<a href={{ path('orders_index', { 'q': query, 'sort_by': col, 'sort_order': sortBy == col ? toggleSortOrder(sortOrder) : defaultSortOrder } ) }}>
-							{{ col|humanize }}
+							{{ col|trans }}
 						</a>
 					{% else %}
-						{{ col|humanize }}
+						{{ col|trans }}
 					{% endif %}
 				</th>
 			{% endfor %}

@@ -1,0 +1,14 @@
+ref: order ref
+clientName: client name
+regdate: order registration date
+symbol: order symbol
+sendDate: order sent date
+invoiced: is invoiced
+ref or symbol: order ref or symbol
+search: search
+client's orders: client's orders
+client's orders not found: client's orders not found
+search results: search results
+query not found: '"query" not found'
+yes: 'yes'
+no: 'no'

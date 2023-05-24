@@ -1,7 +1,7 @@
 {% if attribute(order, col).timestamp is defined %}
     {{ attribute(order, col)|date }}
 {% elseif col == 'invoiced' %}
-    {{ order.invoiced ? 'Yes' : 'No' }}
+    {{ (order.invoiced ? 'yes' : 'no')|trans }}
 {% else %}
     {{ attribute(order, col) }}
 {% endif %}
