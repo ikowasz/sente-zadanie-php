@@ -19,21 +19,22 @@ class OrderRepository
      */
     public function findAll(): OrdersCollection
     {
-        return $this->getOrders();
+        return $this->getOrdersCollection();
     }
 
     /**
-     * Find order symbols and reference ids using needle
+     * Get orders containing some text in either symbol or ref
      *
      * @param string $needle String to search for
-     * @return Order|null Found order or null if nothing found
+     * @return OrdersCollection Collection of found orders
      */
     public function findBySymbolOrRef(string $needle): OrdersCollection
     {
-        return $this->getOrders()->findContainingAnyOf([
-            'symbol' => $needle,
-            'ref' => $needle,
-        ]);
+        return $this->getOrdersCollection()
+            ->filterContainingAnyOf([
+                'symbol' => $needle,
+                'ref' => $needle,
+            ]);
     }
 
     /**
@@ -41,10 +42,8 @@ class OrderRepository
      *
      * @return OrdersCollection
      */
-    private function getOrders(): OrdersCollection
+    private function getOrdersCollection(): OrdersCollection
     {
-        $orders = $this->loader->getOrders();
-
-        return new OrdersCollection($orders);
+        return new OrdersCollection($this->loader->getOrders());
     }
 }

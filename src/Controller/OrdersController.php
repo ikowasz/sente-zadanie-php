@@ -12,45 +12,57 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class OrdersController extends AbstractController
 {
-    public static $defaultSortBy = 'ref';
-    public static $allowSortBy = ['ref', 'symbol', 'regdate', 'sendDate'];
-    public static $tableRows = ['ref', 'clientName', 'regdate', 'symbol', 'sendDate', 'invoiced'];
+    /**
+     * Default order property to sort table by
+     *
+     * @var string
+     */
+    private static string $defaultSortBy = 'ref';
+
+    /**
+     * Default sort direction
+     *
+     * @var string
+     */
+    private static string $defaultSortOrder = SortDirection::DEFAULT->value;
+
+    /**
+     * Order property names available as columns
+     *
+     * @var array
+     */
+    private static array $availableTableCols = ['ref', 'clientName', 'regdate', 'symbol', 'sendDate', 'invoiced'];
+    
+    /**
+     * Order property names available for sorting
+     *
+     * @var array
+     */
+    private static array $sortableTableCols = ['ref', 'symbol', 'regdate', 'sendDate'];
 
     #[Route('/orders', name: 'orders_index')]
     public function index(OrderRepository $repo, Request $request): Response
     {
-        $queryText = $request->query->get('q');
+        $query = $request->query->get('q', '');
         $sortBy = $request->query->get('sort_by', self::$defaultSortBy);
-        $sortOrder = $request->query->get('sort_order');
+        $sortOrder = $request->query->get('sort_order', self::$defaultSortOrder);
+
+        if (!in_array($sortBy, self::$sortableTableCols)) {
+            throw new HttpException(400, "Sort parameter not allowed: $sortBy");
+        }
+
         $sortDirection = SortDirection::fromString($sortOrder);
-
-        $this->validateSortParam($sortBy);
-
-        $orders = empty($queryText) ? $repo->findAll() : $repo->findBySymbolOrRef($queryText);
-        $orders = $orders->sortBy($sortBy, $sortDirection);
+        $orders = empty($query) ? $repo->findAll() : $repo->findBySymbolOrRef($query);
+        $orders->sortBy($sortBy, $sortDirection);
 
         return $this->render('orders/index.html.twig', [
-            'availableSort' => self::$allowSortBy,
-            'defaultOrder' => SortDirection::DEFAULT->value,
-            'rows' => self::$tableRows,
+            'cols' => self::$availableTableCols,
+            'sortableCols' => self::$sortableTableCols,
+            'defaultSortOrder' => self::$defaultSortOrder,
             'sortBy' => $sortBy,
             'sortOrder' => $sortDirection->value,
             'orders' => $orders,
-            'query' => $queryText,
+            'query' => $query,
         ]);
-    }
-
-    /**
-     * Check if given stort parameter is allowed
-     *
-     * @throws HttpException
-     * @param string $param
-     * @return void
-     */
-    private function validateSortParam(string $param)
-    {
-        if (!in_array($param, self::$allowSortBy)) {
-            throw new HttpException(400, "Sort parameter not allowed: $param");
-        }
     }
 }

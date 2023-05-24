@@ -1,22 +1,18 @@
 <table class="table table-striped text-center">
 	<thead>
 		<tr>
-			{% for row in rows %}
+			{% for col in cols %}
 				<th scope="col">
-					{% if row in availableSort %}
-						{% if sortBy == row %}
+					{% if col in sortableCols %}
+						{% if sortBy == col %}
 							<small>{{ sortOrderIcon(sortOrder)|raw }}</small>
 						{% endif %}
 
-						<a href={{ path('orders_index', {
-							'q': query,
-							'sort_by': row,
-							'sort_order': sortBy == row ? toggleSortOrder(sortOrder) : defaultOrder
-						}) }}>
-							{{ row|humanize }}
+						<a href={{ path('orders_index', { 'q': query, 'sort_by': col, 'sort_order': sortBy == col ? toggleSortOrder(sortOrder) : defaultSortOrder } ) }}>
+							{{ col|humanize }}
 						</a>
 					{% else %}
-						{{ row|humanize }}
+						{{ col|humanize }}
 					{% endif %}
 				</th>
 			{% endfor %}
@@ -26,15 +22,9 @@
 	<tbody>
 		{% for order in orders %}
 			<tr>
-				{% for row in rows %}
+				{% for col in cols %}
 					<td>
-						{% if attribute(order, row).timestamp is defined %}
-							{{ attribute(order, row)|date }}
-						{% elseif row == 'invoiced' %}
-							{{ order.invoiced ? 'Yes' : 'No' }}
-						{% else %}
-							{{ attribute(order, row) }}
-						{% endif %}
+						{{ include('orders/table_order_cell.html.twig', {order, col}) }}
 					</td>
 				{% endfor %}
 			</tr>

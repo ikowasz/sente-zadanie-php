@@ -1,0 +1,7 @@
+{% if attribute(order, col).timestamp is defined %}
+    {{ attribute(order, col)|date }}
+{% elseif col == 'invoiced' %}
+    {{ order.invoiced ? 'Yes' : 'No' }}
+{% else %}
+    {{ attribute(order, col) }}
+{% endif %}

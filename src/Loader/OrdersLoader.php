@@ -21,12 +21,11 @@ class OrdersLoader
      */
     public function getOrders(): array
     {
-        $orders = array_map(
-            fn($orderData): Order => new Order($orderData),
-            $this->getData()
-        );
-
-        return $orders;
+        try {
+            return array_map(fn($props): Order => new Order($props), $this->getData());
+        } catch (\ErrorException) {
+            return [];
+        }
     }
 
     /**

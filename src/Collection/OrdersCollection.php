@@ -1,17 +1,18 @@
 <?php
 
 namespace App\Collection;
+
 use App\Enum\SortDirection;
 
 class OrdersCollection extends \ArrayObject
 {
     /**
-     * Find orders using multiple properties, looking for part of a string
+     * Filter orders using multiple properties, looking for part of a string
      *
      * @param array $search Map to search, with property as key and value to search
-     * @return OrdersCollection Copy of filtered collection
+     * @return self
      */
-    public function findContainingAnyOf(array $search): OrdersCollection
+    public function filterContainingAnyOf(array $search): self
     {
         $found = [];
 
@@ -27,16 +28,18 @@ class OrdersCollection extends \ArrayObject
             }
         }
 
-        return new OrdersCollection($found);
+        $this->exchangeArray($found);
+
+        return $this;
     }
 
     /**
      * Sort collection by property
      * 
      * @param string $property Name of property to sort by
-     * @return OrdersCollection Sorted collection copy
+     * @return self
      */
-    public function sortBy(string $property, SortDirection $direction = SortDirection::ASC): OrdersCollection
+    public function sortBy(string $property, SortDirection $direction = SortDirection::ASC): self
     {
         $orders = $this->getArrayCopy();
 
@@ -46,6 +49,8 @@ class OrdersCollection extends \ArrayObject
                 : $b->$property <=> $a->$property
         );
 
-        return new self($orders);
+        $this->exchangeArray($orders);
+
+        return $this;
     }
 }

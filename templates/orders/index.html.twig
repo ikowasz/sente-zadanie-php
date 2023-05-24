@@ -6,7 +6,7 @@
     {% elseif query is empty %}
         Client's orders
     {% else %}
-        Client's orders search results: {{ query|escape }}
+        Client's orders search results: {{ query }}
     {% endif %}
 {% endblock %}
 
@@ -15,26 +15,23 @@
         <div class="container">
             <a class="navbar-brand" href="/orders">Client's orders</a>
 
-            <form class="d-flex" role="search" action={{ path('orders_index') }} method="get">
-                <input type="hidden" name="sort_by" value="{{ sortBy }}"/>
-                <input class="form-control me-2" type="search" placeholder="Ref or symbol" aria-label="Ref or symbol" name="q" value="{{ query|escape }}">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-
+            {% include 'orders/search_form.html.twig' %}
         </div>
     </nav>
 
 	<div class="container">
-        {% if orders|length > 0 %}
-            {% include 'orders/table.html.twig' %}
-        {% else %}
-            <div class="row text-center mt-5">
-                {% if query is empty %}
-                    Orders not found
-                {% else %}
-                    <h3>"{{ query|escape }}" not found</h3>
-                {% endif %}
-            </div>
-        {% endif %}
+        <div class="row mt-5 text-center">
+            {% if orders|length > 0 %}
+                {% include 'orders/table.html.twig' %}
+            {% else %}
+                <h3>
+                    {% if query is empty %}
+                        Orders not found
+                    {% else %}
+                        "{{ query }}" not found
+                    {% endif %}
+                </h3>
+            {% endif %}
+        </div>
 	</div>
 {% endblock %}
