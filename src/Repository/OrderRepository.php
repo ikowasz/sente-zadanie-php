@@ -4,8 +4,10 @@ namespace App\Repository;
 
 use App\Collection\OrdersCollection;
 use App\Loader\OrdersLoader;
-use App\Entity\Order;
 
+/**
+ * Orders retrieval class
+ */
 class OrderRepository
 {
     public function __construct(

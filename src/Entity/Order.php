@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+/**
+ * Single order entity
+ */
 class Order
 {
     /**

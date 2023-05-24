@@ -8,7 +8,7 @@
 							<small>{{ sortOrderIcon(sortOrder)|raw }}</small>
 						{% endif %}
 
-						<a href={{ path('orders_index', { 'q': query, 'sort_by': col, 'sort_order': sortBy == col ? toggleSortOrder(sortOrder) : defaultSortOrder } ) }}>
+						<a href="{{ path('orders_index', { 'q': query, 'sort_by': col, 'sort_order': sortBy == col ? toggleSortOrder(sortOrder) : defaultSortOrder } ) }}">
 							{{ col|trans }}
 						</a>
 					{% else %}

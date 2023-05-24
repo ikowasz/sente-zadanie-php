@@ -4,10 +4,13 @@ namespace App\Collection;
 
 use App\Enum\SortDirection;
 
+/**
+ * Intermediate class for orders set management
+ */
 class OrdersCollection extends \ArrayObject
 {
     /**
-     * Filter orders using multiple properties, looking for part of a string
+     * Remove from the set every order in which none of given properties contains given value
      *
      * @param array $search Map to search, with property as key and value to search
      * @return self

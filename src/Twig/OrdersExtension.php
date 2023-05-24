@@ -44,9 +44,6 @@ class OrdersExtension extends AbstractExtension
      */
     public function toggleSortOrderFunction(string $sortOrder): string
     {
-        // $direction = SortDirection::fromString($sortOrder);
-
-        // return SortDirection::toggle($direction)->value;
         return SortDirection::fromString($sortOrder)->toggle()->value;
     }
 }
